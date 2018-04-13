@@ -1,6 +1,8 @@
 # doppler-docker-akamai-publish
 Docker image to help us to publish releases to Akamai CDN
 
+Travis CI url: https://travis-ci.org/MakingSense/doppler-docker-akamai-publish
+
 # How to use doppler-relay-akamai-publish docker image:
 
 Docker HUB url: https://hub.docker.com/r/dopplerrelay/doppler-relay-akamai-publish/
