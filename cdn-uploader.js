@@ -16,11 +16,11 @@ function UploadFilesFromPath(config) {
 			await client.connect(config.host, config.port);
 			await client.login(config.user, config.password);
 			await client.useDefaultSettings();
-			console.log(`[+] Starting to upload the content of "${config.buildPath}".`);
-			await client.ensureDir(`/${config.cpCode}/${config.basePath}/${config.buildPath}`);
+			console.log(`[+] Starting to upload the content of "${config.sourcePath}".`);
+			await client.ensureDir(`/${config.cpCode}/${config.projectName}/${config.versionName}`);
 			await client.clearWorkingDir();
-			await client.uploadDir(config.buildPath);
-			console.log(`[+] Folder "${config.buildPath}" uploaded.`);
+			await client.uploadDir(config.sourcePath, config.versionName);
+			console.log(`[+] Folder "${config.sourcePath}" uploaded.`);
 			client.close();
 		}
 		catch(err) {
@@ -34,8 +34,11 @@ function UploadFilesFromPath(config) {
 function UpdateConfigWithArgs(argv, config){
 	var args = [].slice.call(argv);
 	args.splice(0, 2);
-	config.basePath = args[0];
-	config.buildPath = args[1];
+	config.sourcePath = args[0];
+	config.projectName = args[1];
+	config.versionName = args[2];
+	
+	
 }
 process.on('unhandledRejection', up => { throw up })
 UpdateConfigWithArgs(process.argv, config);
