@@ -7,7 +7,7 @@ COPY cdn-uploader.js .
 RUN npm init --yes
 RUN npm install basic-ftp
 RUN mkdir /source
-VOLUME source
+VOLUME /source
 ENV AKAMAI_CDN_HOSTNAME=nsfoo.upload.akamai.com
 ENV AKAMAI_CDN_USERNAME=testuser
 ENV AKAMAI_CDN_PASSWORD=testpassword
