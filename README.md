@@ -9,88 +9,26 @@ Docker HUB url: https://hub.docker.com/r/dopplerrelay/doppler-relay-akamai-publi
 
 This image is ready to upload to akamai CDN the resource files. Contains the cdn-uploader script and his dependencies ready to run.
 
-Zero Step, define your environment variables:
+IMPORTANT:
+It is necessary to define AKAMAI_CDN_HOSTNAME, AKAMAI_CDN_USERNAME, AKAMAI_CDN_PASSWORD, AKAMAI_CDN_CPCODE, PROJECT_NAME, VERSION_NAME environment variables and a /source volume.
 
-You need to define this variables in your host machine. They are needed to login with the CDN ftp.
-
-In Windows shell:
-
-```bash
-set AKAMAI_CDN_HOSTNAME=example.cdn.com # CDN netstorage domain
-set AKAMAI_CDN_USERNAME=example         # Username from Akamai CDN
-set AKAMAI_CDN_PASSWORD=12345           # Password from Akamai CDN
-set AKAMAI_CDN_CPCODE=56789             # Cpcode provided by Akamai Netstorage
-```
-
-In Linux shell:
+## First Step, run it: ##
 
 ```bash
-export AKAMAI_CDN_HOSTNAME=example.cdn.com # CDN netstorage domain
-export AKAMAI_CDN_USERNAME=example         # Username from Akamai CDN
-export AKAMAI_CDN_PASSWORD=12345           # Password from Akamai CDN
-export AKAMAI_CDN_CPCODE=56789             # Cpcode provided by Akamai Netstorage, this is the root folder with write privileges inside the Akamai CDN
+docker run --rm \
+	-e "AKAMAI_CDN_HOSTNAME=example.cdn.com" \
+	-e "AKAMAI_CDN_USERNAME=example" \
+	-e "AKAMAI_CDN_PASSWORD=12345" \
+	-e "AKAMAI_CDN_CPCODE=56789" \
+	-e "PROJECT_NAME=mseditor" \
+	-e "VERSION_NAME=v1.0.0-build1234" \
+	-v /`pwd`/build:/source dopplerrelay/doppler-relay-akamai-publish
+
+	 # /`pwd`/ is a reference to your current working directory
+	 # by default is /`pwd`/build, change it if you have your source files in a different folder: /`pwd`/[path_to_files] example: /`pwd`/my_folder/my_subfolder
 ```
 
-First Step, set the docker-compose.yml:
-
-The environment variables in the host machine are integrated in the docker image by the docker-compose.yml file. It is required by the cdn-uploader.js script.
-
-```bash
-version: '3.2'
-services:
-  app:
-    build:
-      context: .
-      dockerfile: editor.Dockerfile # Name of your dockerfile implementing doppler-docker-akamai-publish image
-    environment: 
-      - 'AKAMAI_CDN_HOSTNAME=${AKAMAI_CDN_HOSTNAME}'
-      - 'AKAMAI_CDN_USERNAME=${AKAMAI_CDN_USERNAME}'
-      - 'AKAMAI_CDN_PASSWORD=${AKAMAI_CDN_PASSWORD}'
-      - 'AKAMAI_CDN_CPCODE=${AKAMAI_CDN_CPCODE}'
-```
-
-Second Step, define your dockerfile:
-
-In order to implement the image you need to call it from a Dockerfile, you can multistage it with another one if you want.
-
-Example using multistage:
-
-```bash
-FROM node:6.10.1 AS mseditor-env # You need to give an alias to previous executed images, in this example is: mseditor-env
-
-# Define your stuff...
-RUN mkdir /refactor
-RUN mkdir /refactor/builds
-WORKDIR /refactor
-RUN pwd
-COPY . .
-RUN npm install -g node-sass@4.8.3
-RUN npm install -g gulp
-RUN npm install
-RUN npm rebuild node-sass
-EXPOSE 3000
-RUN gulp default
-
-# Call a second stage to CDN upload using doppler-docker-akamai-publish image
-FROM dopplerrelay/doppler-relay-akamai-publish:latest
-WORKDIR .
-COPY --from=mseditor-env /refactor/builds /builds
-CMD ["node", "cdn-uploader.js", "mseditor", "builds"]
-```
-
-Third step, run it with docker compose:
-
-This will launch the build of your docker containers.
-
-Docker compose command:
-
-This command will get the docker-compose.yml config file, it is required that docker-compose.yml and your Dockerfile share the same path.
-
-```bash
-docker-compose up
-```
-
-NOTE:
+**NOTE:**
 
 This image will be updated in docker hub for each release in the master branch of this repository using continuous integration through travis yaml configuration.
 
@@ -102,41 +40,40 @@ This script upload via ftp resources from the docker container image to Akamai C
 Command:
 
 ```bash
-node cdn-uploader.js arg1 arg2
+node cdn-uploader.js arg1 arg2 arg3
 
-# arg1: [REQUIRED] Is the base path to load different projects to the cdn, must be unique for each project.
+#arg1: Is the source path from the docker image where will found the files and folders to upload.
 
-# arg2: [REQUIRED] Is the build path where you found your resources.
+#arg2: Is the base path to load different projects to the cdn, must be unique for each project.
+
+#arg3: Is the destination build path where you found your resources.
 
 ```
 
 Example:
 
 ```bash
-
-
 drwxr-xr-x    2 root     root          4096 Jan  9 19:37 .
 drwxr-xr-x    1 root     root          4096 Apr 13 13:25 ..
 drwxr-xr-x    2 root     root          4096 Jan  9 19:37 cdn-uploader.js
-drwxr-xr-x    1 root     root          4096 Apr 13 13:25 example/
-drwxr-xr-x    1 root     root          4096 Apr 13 13:25 projects/other/stuff
-drwxr-xr-x    1 root     root          4096 Apr 13 13:25 builds/build-v1.0
+drwxr-xr-x    1 root     root          4096 Apr 13 13:25 source0/example/
+drwxr-xr-x    1 root     root          4096 Apr 13 13:25 source2/projects/
+drwxr-xr-x    1 root     root          4096 Apr 13 13:25 source2/v1.0.0-build1234/
+drwxr-xr-x    1 root     root          4096 Apr 13 13:25 source/
 total 8
 
 
+node cdn-uploader.js source0/example project1 exampleBuild # This will upload all files and folders inside of "example" folder recursively to "project1/exampleBuild" folder on CDN.
 
-node cdn-uploader.js feature1 example # This will upload all files and folders inside of "example" folder recursively, note that the "example" folder will not be uploaded.
-
-node cdn-uploader.js feature2 projects/other # This will upload all files and folders inside of "other" folder recursively, note that the "other" folder will not be uploaded but "stuff" yes.
-
+node cdn-uploader.js source2/projects project2 other # This will upload all files and folders inside of "projects" folder recursively to "project2/other" folder on CDN.
 
 #Real examples:
 
-node cdn-uploader.js mseditor builds
+node cdn-uploader.js source mseditor v1.0.0-build1234
 
-#Will upload build-v1.0 inside of builds/ folder
+#Will upload  v1.0.0-build1234 inside of source/ folder
 
-http://cdn.example.akamai.com/mseditor/build-v1.0/scripts/example.gif
+http://cdn.fromdoppler.com/mseditor/v1.0.0-build1234/scripts/example.gif
 
 ```
 
