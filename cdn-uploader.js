@@ -18,6 +18,7 @@ function UploadFilesFromPath(config) {
 			await client.useDefaultSettings();
 			console.log(`[+] Starting to upload the content of "${config.sourcePath}".`);
 			await client.ensureDir(`/${config.cpCode}/${config.projectName}`);
+			await client.clearWorkingDir()
 			await client.uploadDir(config.sourcePath, config.versionName);
 			console.log(`[+] Folder "${config.sourcePath}" uploaded.`);
 			client.close();
