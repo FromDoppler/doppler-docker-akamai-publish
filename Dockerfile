@@ -4,7 +4,6 @@ RUN apk update && apk upgrade && apk add nodejs
 COPY cdn-uploader.js .
 RUN npm init --yes
 RUN npm install basic-ftp
-RUN mkdir /source
 VOLUME /source
 ENV AKAMAI_CDN_HOSTNAME=nsfoo.upload.akamai.com
 ENV AKAMAI_CDN_USERNAME=testuser
