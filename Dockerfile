@@ -1,5 +1,5 @@
 FROM alpine:latest AS doppler-relay-akamai-publish
-WORKDIR .
+WORKDIR /app
 RUN mkdir ./ci-last-run
 RUN echo "">./ci-last-run/`date`
 RUN apk update && apk upgrade && apk add nodejs
@@ -14,4 +14,4 @@ ENV AKAMAI_CDN_PASSWORD=testpassword
 ENV AKAMAI_CDN_CPCODE=12345
 ENV PROJECT_NAME=bar
 ENV VERSION_NAME=v1.0.0-build1234
-CMD node cdn-uploader.js source $PROJECT_NAME $VERSION_NAME
+CMD node cdn-uploader.js /source $PROJECT_NAME $VERSION_NAME
