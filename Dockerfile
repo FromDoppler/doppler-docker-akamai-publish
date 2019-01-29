@@ -1,9 +1,8 @@
 FROM alpine:latest AS doppler-relay-akamai-publish
 WORKDIR /app
 RUN apk update && apk upgrade && apk add nodejs yarn
-COPY cdn-uploader.js .
-RUN yarn init --yes
-RUN yarn add basic-ftp
+COPY . .
+RUN yarn
 VOLUME /source
 ENV AKAMAI_CDN_HOSTNAME=nsfoo.upload.akamai.com
 ENV AKAMAI_CDN_USERNAME=testuser
