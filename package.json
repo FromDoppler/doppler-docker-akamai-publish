@@ -1,0 +1,23 @@
+{
+  "name": "doppler-docker-akamai-publish",
+  "version": "1.0.0",
+  "description": "Docker image to help us to publish releases to Akamai CDN",
+  "main": "cdn-uploader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakingSense/doppler-docker-akamai-publish.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MakingSense/doppler-docker-akamai-publish/issues"
+  },
+  "homepage": "https://github.com/MakingSense/doppler-docker-akamai-publish#readme",
+  "dependencies": {
+    "basic-ftp": "^3.1.1"
+  }
+}
