@@ -1,6 +1,5 @@
-FROM alpine:latest AS doppler-relay-akamai-publish
+FROM node:lts-alpine AS doppler-relay-akamai-publish
 WORKDIR /app
-RUN apk update && apk upgrade && apk add nodejs yarn
 COPY . .
 RUN yarn
 VOLUME /source
