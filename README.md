@@ -2,11 +2,9 @@
 
 Docker image to help us to publish releases to Akamai CDN
 
-Travis CI url: https://travis-ci.org/MakingSense/doppler-docker-akamai-publish
+Docker HUB: https://hub.docker.com/r/dopplerrelay/doppler-relay-akamai-publish/
 
 ## How to use doppler-relay-akamai-publish docker image
-
-Docker HUB url: https://hub.docker.com/r/dopplerrelay/doppler-relay-akamai-publish/
 
 This image is ready to upload to Akamai CDN the resource files. Contains the _cdn-uploader_ script and his dependencies ready to run.
 
@@ -75,3 +73,11 @@ http://cdn.fromdoppler.com/mseditor/v1.0.0-build1234/scripts/example.gif
 ```
 
 Note: The shell context init in the same folder where _cdn-uploader.js_ is running.
+
+## Continuous integration and continuous deployment
+
+This project is build automatically on each _pull request_ and a new _latest_ version is published when _master_ branch change.
+
+CI: https://cloud.docker.com/u/dopplerrelay/repository/docker/dopplerrelay/doppler-relay-akamai-publish/builds
+
+Old Travis CI (deprecated): https://travis-ci.org/MakingSense/doppler-docker-akamai-publish
