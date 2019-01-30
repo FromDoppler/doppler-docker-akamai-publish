@@ -1,18 +1,18 @@
 # doppler-docker-akamai-publish
+
 Docker image to help us to publish releases to Akamai CDN
 
 Travis CI url: https://travis-ci.org/MakingSense/doppler-docker-akamai-publish
 
-# How to use doppler-relay-akamai-publish docker image:
+## How to use doppler-relay-akamai-publish docker image
 
 Docker HUB url: https://hub.docker.com/r/dopplerrelay/doppler-relay-akamai-publish/
 
-This image is ready to upload to akamai CDN the resource files. Contains the cdn-uploader script and his dependencies ready to run.
+This image is ready to upload to Akamai CDN the resource files. Contains the _cdn-uploader_ script and his dependencies ready to run.
 
-IMPORTANT:
-It is necessary to define AKAMAI_CDN_HOSTNAME, AKAMAI_CDN_USERNAME, AKAMAI_CDN_PASSWORD, AKAMAI_CDN_CPCODE, PROJECT_NAME, VERSION_NAME environment variables and a /source volume.
+**IMPORTANT:** It is necessary to define `AKAMAI_CDN_HOSTNAME`, `AKAMAI_CDN_USERNAME`, `AKAMAI_CDN_PASSWORD`, `AKAMAI_CDN_CPCODE`, `PROJECT_NAME`, `VERSION_NAME` environment variables and a `/source` volume.
 
-## First Step, run it: ##
+### First Step, run it
 
 ```bash
 docker run --rm \
@@ -28,12 +28,9 @@ docker run --rm \
 	 # by default is /`pwd`/build, change it if you have your source files in a different folder: /`pwd`/[path_to_files] example: /`pwd`/my_folder/my_subfolder
 ```
 
-**NOTE:**
+**NOTE:** This image will be updated in docker hub for each release in the master branch of this repository using continuous integration through travis yaml configuration.
 
-This image will be updated in docker hub for each release in the master branch of this repository using continuous integration through travis yaml configuration.
-
-
-# How to use cdn-uploader.js library:
+## How to use _cdn-uploader.js_ library
 
 This script upload via ftp resources from the docker container image to Akamai CDN.
 
@@ -77,4 +74,4 @@ http://cdn.fromdoppler.com/mseditor/v1.0.0-build1234/scripts/example.gif
 
 ```
 
-Note: The shell context init in the same folder where cdn-uploader.js is running.
+Note: The shell context init in the same folder where _cdn-uploader.js_ is running.
