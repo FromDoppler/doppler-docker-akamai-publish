@@ -20,7 +20,8 @@ docker run --rm \
 	-e "AKAMAI_CDN_CPCODE=56789" \
 	-e "PROJECT_NAME=mseditor" \
 	-e "VERSION_NAME=v1.0.0-build1234" \
-	-v /`pwd`/build:/source dopplerrelay/doppler-relay-akamai-publish
+	-v /`pwd`/build:/source \
+	dopplerrelay/doppler-relay-akamai-publish
 
 	 # /`pwd`/ is a reference to your current working directory
 	 # by default is /`pwd`/build, change it if you have your source files in a different folder: /`pwd`/[path_to_files] example: /`pwd`/my_folder/my_subfolder
