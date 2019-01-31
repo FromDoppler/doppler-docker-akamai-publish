@@ -81,3 +81,26 @@ This project is build automatically on each _pull request_ and a new _latest_ ve
 CI: https://cloud.docker.com/u/dopplerrelay/repository/docker/dopplerrelay/doppler-relay-akamai-publish/builds
 
 Old Travis CI (deprecated): https://travis-ci.org/MakingSense/doppler-docker-akamai-publish
+
+## Contribute to this tool
+
+First, take into account that any change could affect a lot of projects: be careful.
+
+Test it manually in your local environment before create a PR. You can use _real-test.sh_ to build the image locally and use it to publish test content.
+
+It requires set the follow environment values in your local environment:
+
+* `AKAMAI_CDN_HOSTNAME`
+* `AKAMAI_CDN_USERNAME`
+* `AKAMAI_CDN_PASSWORD`
+* `AKAMAI_CDN_CPCODE`
+
+Examples:
+
+```bash
+# default test, publish `./test-content` to `doppler-docker-akamai-publish-test/latest`
+sh real-test.sh
+
+# custom test, publish `/tmp` to `doppler-docker-akamai-publish-test/v1.1.1`
+sh real-test.sh v1.1.1 /tmp
+```
